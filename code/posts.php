@@ -1,32 +1,78 @@
 <?php
 
 /*
+ * === POSTS ===
+ */
+
+/*
  * Creates post file and updates the post index.
  */
-function create_post($title, $text, $tags, $author, $custom_name = '')
+function create_post($title, $text, $summary, $tags = array(), $author, $lang, $custom_name = '')
 {
+   $normalized_title = normalized_title($title);
+   $file = 'posts/'. $normalized_title;
+   if (is_file($file))
+   {
+      throw new Exception('A post with the same name already exists, please provide another name or set a custom name');
+      return false;
+   }
    
+   write_file($file, $text);
+   
+   update_post_index($title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, $custom_name = '');
 }
 
 /*
  * Updates post file (generating a new version) and updates the post index.
  */
-function update_post($title, $text, $tags, $author, $custom_name = '')
+function update_post($title, $text, $tags = array(), $author, $lang, $custom_name = '')
 {
    
 }
+
+/*
+ * Post title to snake case and substitution of special characters.
+ */
+function normalized_title($title)
+{
+   $normalized = strtolower($title);
+   $normalized = str_replace(" ", "_", $normalized);
+   $normalized = filter_special_chars($normalized);
+   $normalized = filter_non_letters($normalized);
+   return $normalized;
+}
+
+function filter_special_chars($string)
+{
+   $unwanted_array = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                           'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                           'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                           'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                           'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+   return strtr($string, $unwanted_array);
+}
+
+function filter_non_letters( $string )
+{
+  $filtered = preg_replace('~[^\\pL0-9_]+~u', '', $string);
+  return preg_replace('~[^-a-z0-9_]+~', '', $filtered);
+}
+
+/*
+ * === METADATA / INDEXES ===
+ */
 
 /*
  * Gets JSON from SESSION or loads it if not cached.
  */
 function get_post_index()
 {
-   if (!array_key_exists('medatada', $_SESSION))
+   if (!array_key_exists('metadata', $_SESSION))
    {
       load_post_index();
    }
    
-   return $_SESSION['medatada'];
+   return $_SESSION['metadata'];
 }
 
 /*
@@ -34,32 +80,195 @@ function get_post_index()
  */
 function load_post_index()
 {
-   $filename = 'conf/metadata.json';
-   if (file_exists($filename))
+   $index_path = 'conf/metadata.json';
+   if (is_file($index_path))
    {
-      $json = file_get_contents ( string $filename);
+      $json = file_get_contents ($index_path);
       $metadata = json_decode($json, true);
-      $_SESSION['medatada'] = $medatada;
+      $_SESSION['metadata'] = $metadata;
       return $metadata;
    }
    
    return false;
 }
 
-/*
- * Reloads JSON in SESSION.
- */
-function refresh_post_index()
-{
-   
-}
 
 /*
  * Updates JSON with new post.
  */
-function update_post_index($post)
+function update_post_index($title, $text, $summary, $tags = array(), $author, $lang, $file_path, $normalized_title, $custom_name = '')
 {
+   // create index entry for post version object
+   $post_version = array(  // entry on the post index
+      "id" => $normalized_title, // for now the id is the normalized title
+      "versions" => array( // versions of this post
+         array(            // this post
+           "title"     => $title,
+           "summary"   => $summary,
+           "normalized_title" => $normalized_title,
+           "timestamp" => time(),
+           "tags"      => $tags,
+           "file"      => $file_path,
+           "author"    => $author,
+           "lang"      => $lang
+         )
+      )
+   );
    
+   // get index and put the new entry at the beggining
+   $index = get_post_index();
+   array_unshift($index['posts'], $post_version);
+   
+   // update the index file
+   $json = json_encode($index);
+   $index_path = 'conf/metadata.json';
+   write_file($index_path, $json);
+   
+   // reload index to session
+   load_post_index();
+}
+
+/*
+ * Given an array of post versions, returns the one with the highest timestamp.
+ * The array follows the structure of one entry of the post index.
+ */
+function get_latest_post_version($post_versions)
+{
+   $index = 0;
+   if (count($post_versions) > 1)
+   {
+      for ($i = 1; $i < count($post_versions); $i++)
+      {
+         if ($post_versions[$i]['timestamp'] > $post_versions[$index]['timestamp'])
+         {
+            $index = $i;
+         }
+      }
+   }
+   return $post_versions[$index];
+}
+
+/*
+ * Given an array of post versions, returns the lowest timestamp, that is
+ * the first time this post was published to show on the UI. Timestamps of
+ * newer versions are update timestamps.
+ */
+function get_post_published_date($post_versions)
+{
+   $index = 0;
+   if (count($post_versions) > 1)
+   {
+      for ($i = 1; $i < count($post_versions); $i++)
+      {
+         if ($post_versions[$i]['timestamp'] < $post_versions[$index]['timestamp'])
+         {
+            $index = $i;
+         }
+      }
+   }
+   return $post_versions[$index]['timestamp'];
+}
+
+/*
+ * Gets the post versions inside an index entry by it's entry id.
+ */
+function get_post_versions($id)
+{
+   $index = get_post_index();
+   foreach ($index['posts'] as $entry)
+   {
+      if ($entry['id'] == $id) return $entry['versions'];
+   }
+   return false;
+}
+
+/*
+ * Given one specific version of a post, returns its contents from the referenced post file.
+ */
+function get_post_contents($post)
+{
+   $post_file = $post['file'];
+   if (is_file($post_file))
+   {
+      $html = file_get_contents ($post_file);
+      return $html;
+   }
+   
+   return false;
+}
+
+/*
+ * === FILES ===
+ */
+
+function createEmptyFile($path)
+{
+   // TODO: chekeo de que no existe el archivo.
+   if (is_file($path)) throw new Exception("FileSystem::createEmptyFile - El archivo: $path ya existe.");
+   if ($file = fopen($path, 'w+'))
+   {
+      fwrite($file, "");
+      fclose($file);
+      return true;
+   }
+   fclose($file);
+   return false;
+}
+
+function write_file($filepath, $text)
+{
+   if ($file = fopen($filepath, 'w+'))
+   {
+      fwrite($file, $text);
+   }
+   fclose($file);
+}
+
+
+function getFileNames($path, $match = null, $groups = null)
+{
+   if (is_dir($path))
+   {
+      $res = array();
+      $d = dir($path);
+      while (false !== ($entry = $d->read()))
+      {
+         if (is_file($path . "/" . $entry))
+         {
+            //echo "FILE<br/>";
+            $matches = null;
+            if ($match)
+            {
+                //echo "MATCH<br/>";
+                if (preg_match($match, $entry, $matches))
+                {
+                    //echo "MATCHES<br/>";
+                    if (!$groups) $res[] = $entry;
+                    else
+                    {
+                       $gentry = "";
+                       foreach($groups as $i)
+                       {
+                        $gentry .= $matches[$i];
+                       }
+                       $res[] = $gentry;
+                    }
+                }
+            }
+            else // Si no paso match, le entrego derecho la entrada.
+            {
+               //echo "ELSE<br/>";
+               $res[] = $entry;
+            }
+         }
+      }
+      $d->close();
+      return $res;
+   }
+   else
+   {
+      throw new Exception("FileSystem::getFileNames - El directorio: $path no existe.");
+   }
 }
 
 ?>

@@ -1,7 +1,6 @@
 <?php
-session_start();
-date_default_timezone_set('America/Montevideo');
-$_base_dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
+
+
 
 ?>
 <!DOCTYPE html>
@@ -43,7 +42,7 @@ $_base_dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'],
   <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+      <a class="navbar-brand" href="index.html">CaboLabs Blog</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         Menu
         <i class="fa fa-bars"></i>
@@ -51,16 +50,13 @@ $_base_dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'],
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="/blog">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="about.html">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="post.html">Sample Post</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-link" href="https://www.cabolabs.com">Back to CaboLabs.com</a>
           </li>
         </ul>
       </div>
@@ -83,8 +79,8 @@ $_base_dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'],
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Clean Blog</h1>
-              <span class="subheading">A Blog Theme by Start Bootstrap</span>
+              <h1>CaboLabs Health Informatics</h1>
+              <span class="subheading">Health Information Systems, Standards and Interoperability</span>
             </div>
           </div>
         </div>
@@ -95,59 +91,38 @@ $_base_dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'],
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Man must explore, and this is exploration at its greatest
-              </h2>
-              <h3 class="post-subtitle">
-                Problems look mighty small from 150 miles up
-              </h3>
-            </a>
-            <p class="post-meta">Posted by
-              <a href="#">Start Bootstrap</a>
-              on September 24, 2017</p>
-          </div>
-          <hr>
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
-              </h2>
-            </a>
-            <p class="post-meta">Posted by
-              <a href="#">Start Bootstrap</a>
-              on September 18, 2017</p>
-          </div>
-          <hr>
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Science has not yet mastered prophecy
-              </h2>
-              <h3 class="post-subtitle">
-                We predict too much for the next year and yet far too little for the next ten.
-              </h3>
-            </a>
-            <p class="post-meta">Posted by
-              <a href="#">Start Bootstrap</a>
-              on August 24, 2017</p>
-          </div>
-          <hr>
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Failure is not an option
-              </h2>
-              <h3 class="post-subtitle">
-                Many say exploration is part of our destiny, but it''s actually our duty to future generations.
-              </h3>
-            </a>
-            <p class="post-meta">Posted by
-              <a href="#">Start Bootstrap</a>
-              on July 8, 2017</p>
-          </div>
-          <hr>
+        
+          <?php
+          /*
+          + published date is the timestamp of version 1
+          + TODO: resolve link to show: /article/normalized_title.html
+          + TODO: pagination
+          + TODO: entry id is used to show the post, that is the normalized_name of the first version of the post,
+                  but the admin might want to change it to improve the URL for SEO, that should be possible setting
+                  a custom id or permurl.
+          */
+          foreach ($index['posts'] as $entry)
+          {
+             $versions = $entry['versions'];
+             $post = get_latest_post_version($versions);
+             
+             // $post['timestamp'] is the update timestamp if there is more than 1 version
+             $published_timestamp = get_post_published_date($versions);
+             $date = date("F j, Y, g:i a", $published_timestamp);
+             
+             echo <<<EX
+                <div class="post-preview">
+                  <a href="article/{$entry['id']}.html">
+                    <h2 class="post-title">{$post['title']}</h2>
+                    <h3 class="post-subtitle">{$post['summary']}</h3>
+                  </a>
+                  <p class="post-meta">Posted by <a href="#">{$post['author']}</a> on {$date}</p>
+                </div>
+                <hr>
+EX;
+          }
+          ?>
+        
           <!-- Pager -->
           <div class="clearfix">
             <a class="btn btn-secondary float-right" href="#">Older Posts &rarr;</a>

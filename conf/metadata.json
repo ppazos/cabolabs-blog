@@ -1,44 +1,82 @@
 {
   "posts": [
     {
+      "id": "post_1_v1",
       "versions": [
         {
-           "title": "Nuevo curso de openEHR",
-           "timestamp": "",
-           "tags": [],
-           "file": ""
-        },
-        {
-           "title": "Nuevo curso de openEHR",
-           "timestamp": "",
-           "tags": ["cursos"],
-           "file": ""
-        },
-        {
-           "title": "Nuevo curso de openEHR 8a ed",
-           "timestamp": "",
+           "title": "Post 1 v3",
+           "summary": "Todo lo que un programador debe saber sobre openEHR",
+           "normalized_title": "post_1_v3",
+           "timestamp": 1505510549,
            "tags": ["cursos", "ACHISA", "CaboLabs"],
-           "file": ""
+           "file": "posts/a3",
+           "author": "Pablo Pazos Gutierrez",
+           "lang": "en"
+        },
+        {
+           "title": "Post 1 v2",
+           "summary": "Todo lo que un programador debe saber sobre openEHR",
+           "normalized_title": "post_1_v2",
+           "timestamp": 1505510391,
+           "tags": ["cursos"],
+           "file": "posts/a2",
+           "author": "Pablo Pazos Gutierrez",
+           "lang": "en"
+        },
+        {
+           "title": "Post 1 v1",
+           "summary": "",
+           "normalized_title": "post_1_v1",
+           "timestamp": 1505510364,
+           "tags": [],
+           "file": "posts/a1",
+           "author": "Pablo Pazos Gutierrez",
+           "lang": "en"
         }
       ]
     },
     {
+      "id": "post_2_v1",
       "versions": [
         {
-           "title": "",
-           "timestamp": "",
+           "title": "Post 2 v1",
+           "summary": "<div align=\"center\"><img src=\"https://www.cabolabs.com/images/cabolabs.gif\" /></div>",
+           "normalized_title": "post_2_v1",
+           "timestamp": 1505510531,
            "tags": [],
-           "file": ""
+           "file": "posts/b1",
+           "author": "Pablo Pazos Gutierrez",
+           "lang": "en"
         }
       ]
     },
     {
+      "id": "post_3_v1",
       "versions": [
         {
-           "title": "",
-           "timestamp": "",
+           "title": "Post 3 v1",
+           "summary": "Nuevo curso de interoperabilida con Mirth Connect",
+           "normalized_title": "post_3_v1",
+           "timestamp": 1505510420,
            "tags": [],
-           "file": ""
+           "file": "posts/c1",
+           "author": "Pablo Pazos Gutierrez",
+           "lang": "en"
+        }
+      ]
+    },
+    {
+      "id": "post_4_v1",
+      "versions": [
+        {
+           "title": "Post 4 v1",
+           "summary": "",
+           "normalized_title": "post_4_v1",
+           "timestamp": 1505510001,
+           "tags": [],
+           "file": "posts/d1",
+           "author": "Pablo Pazos Gutierrez",
+           "lang": "en"
         }
       ]
     }
