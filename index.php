@@ -1,3 +1,9 @@
+<?php
+session_start();
+date_default_timezone_set('America/Montevideo');
+$_base_dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,7 +13,7 @@
     
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Bog</title>
+    <title>Blog</title>
 
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
@@ -60,6 +66,7 @@
       </div>
     </nav>
     
+    <?php if (array_key_exists('auth', $_SESSION) && $_SESSION['auth'] === true) : ?>
     <!-- edit menu -->
     <nav id="edit-menu">
       <div class="list-group">
@@ -68,6 +75,7 @@
         <a href="create.php" class="list-group-item list-group-item-action">Create</a>
       </div>
     </nav>
+    <?php endif; ?>
 
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('img/home-bg.jpg')">
@@ -132,7 +140,7 @@
                 Failure is not an option
               </h2>
               <h3 class="post-subtitle">
-                Many say exploration is part of our destiny, but it’s actually our duty to future generations.
+                Many say exploration is part of our destiny, but it''s actually our duty to future generations.
               </h3>
             </a>
             <p class="post-meta">Posted by

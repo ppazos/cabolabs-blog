@@ -1,0 +1,46 @@
+{
+  "posts": [
+    {
+      "versions": [
+        {
+           "title": "Nuevo curso de openEHR",
+           "timestamp": "",
+           "tags": [],
+           "file": ""
+        },
+        {
+           "title": "Nuevo curso de openEHR",
+           "timestamp": "",
+           "tags": ["cursos"],
+           "file": ""
+        },
+        {
+           "title": "Nuevo curso de openEHR 8a ed",
+           "timestamp": "",
+           "tags": ["cursos", "ACHISA", "CaboLabs"],
+           "file": ""
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+           "title": "",
+           "timestamp": "",
+           "tags": [],
+           "file": ""
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+           "title": "",
+           "timestamp": "",
+           "tags": [],
+           "file": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Deny access to all files in current folder
+<Files ~ "^.*">
+  Deny from all
+</Files>
