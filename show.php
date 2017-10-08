@@ -37,28 +37,7 @@
     </style>
   </head>
   <body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <a class="navbar-brand" href="index.html">CaboLabs Blog</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        Menu
-        <i class="fa fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/blog">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://www.cabolabs.com">Back to CaboLabs.com</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <?php include('nav.php'); ?>
 
     <?php if (array_key_exists('auth', $_SESSION) && $_SESSION['auth'] === true) : ?>
     <!-- edit menu -->
@@ -184,7 +163,9 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    
     <script src="<?=$_base_dir;?>/vendor/popper/popper.min.js"></script>
     <script src="<?=$_base_dir;?>/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=$_base_dir;?>/js/clean-blog.min.js"></script>

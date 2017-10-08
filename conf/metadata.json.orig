@@ -1,18 +1,5 @@
 {
-	"posts": [{
-		"id": "59da96589c9ad",
-		"versions": [{
-			"title": "safdasd fghj fghfg jfghjfgjhf GGGGGG",
-			"summary": "asdfas gfhj fgh j",
-			"normalized_title": "safdasd_fghj_fghfg_jfghjfgjhf_gggggg",
-			"timestamp": 1507497560,
-			"tags": ["CaboLabs", "Education"],
-			"file": "posts\/59da96589c9ad.v1",
-			"author": "Pablo Pazos Gutierrez",
-			"lang": "en",
-			"version": 1
-		}]
-	}, {
+	"posts": [ {
 		"id": "post_1_v1",
 		"versions": [{
 			"title": "Post 1 v3",

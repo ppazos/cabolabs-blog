@@ -10,7 +10,8 @@
 function create_post($title, $text, $summary, $tags = array(), $author, $lang, $custom_name = '')
 {
    $normalized_title = normalized_title($title);
-   $file = 'posts/'. $normalized_title;
+   $id = uniqid();
+   $file = 'posts/'. $id .'.v1'; // the first file is random.v1, on updates it will save random.v2, random.v3, etc.
    if (is_file($file))
    {
       throw new Exception('A post with the same name already exists, please provide another name or set a custom name');
@@ -19,7 +20,7 @@ function create_post($title, $text, $summary, $tags = array(), $author, $lang, $
    
    write_file($file, $text);
    
-   update_post_index($title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, $custom_name = '');
+   update_post_index($id, $title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, '');
 }
 
 /*
@@ -27,7 +28,7 @@ function create_post($title, $text, $summary, $tags = array(), $author, $lang, $
  */
 function update_post($title, $text, $tags = array(), $author, $lang, $custom_name = '')
 {
-   
+   // Need to check the current latest version to pass it to the updated_post_index
 }
 
 /*
@@ -96,11 +97,11 @@ function load_post_index()
 /*
  * Updates JSON with new post.
  */
-function update_post_index($title, $text, $summary, $tags = array(), $author, $lang, $file_path, $normalized_title, $custom_name = '')
+function update_post_index($id, $title, $text, $summary, $tags = array(), $author, $lang, $file_path, $normalized_title, $custom_name = '', $version = 1)
 {
    // create index entry for post version object
    $post_version = array(  // entry on the post index
-      "id" => $normalized_title, // for now the id is the normalized title
+      "id" => $id, // for now the id is the normalized title
       "versions" => array( // versions of this post
          array(            // this post
            "title"     => $title,
@@ -110,7 +111,8 @@ function update_post_index($title, $text, $summary, $tags = array(), $author, $l
            "tags"      => $tags,
            "file"      => $file_path,
            "author"    => $author,
-           "lang"      => $lang
+           "lang"      => $lang,
+           "version"   => $version
          )
       )
    );
@@ -270,5 +272,29 @@ function getFileNames($path, $match = null, $groups = null)
       throw new Exception("FileSystem::getFileNames - El directorio: $path no existe.");
    }
 }
+
+/**
+ * USERS
+ */
+/*
+ * Loads users JSON.
+ */
+function get_users()
+{
+   $_path = 'conf/users.json';
+   if (is_file($_path))
+   {
+      $json = file_get_contents ($_path);
+      $users = json_decode($json, true);
+      return $users;
+   }
+   
+   return false;
+}
+
+/**
+ * UTILS
+ */
+
 
 ?>

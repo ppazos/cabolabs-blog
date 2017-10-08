@@ -1,8 +1,3 @@
-<?php
-
-
-
-?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +7,7 @@
     
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Blog</title>
+    <title>Bog</title>
 
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
@@ -32,26 +27,16 @@
     <link href="css/clean-blog.min.css" rel="stylesheet">
     
     <style>
-      #edit-menu {
-         position: absolute;
-         top: 100px;
-         right: 20px;
+      form {
+         width: 100%;
+      }
+      form input {
+         width: 100%;
       }
     </style>
   </head>
   <body>
     <?php include('nav.php'); ?>
-    
-    <?php if (array_key_exists('auth', $_SESSION) && $_SESSION['auth'] === true) : ?>
-    <!-- edit menu -->
-    <nav id="edit-menu">
-      <div class="list-group">
-        <a href="#" class="list-group-item active">View</a>
-        <a href="#" class="list-group-item list-group-item-action">Edit</a>
-        <a href="create.php" class="list-group-item list-group-item-action">Create</a>
-      </div>
-    </nav>
-    <?php endif; ?>
 
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('img/home-bg.jpg')">
@@ -59,8 +44,8 @@
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>CaboLabs Health Informatics</h1>
-              <span class="subheading">Health Information Systems, Standards and Interoperability</span>
+              <h1>CaboLabs Blog</h1>
+              <span class="subheading">A Blog Theme by Start Bootstrap</span>
             </div>
           </div>
         </div>
@@ -70,44 +55,25 @@
     <!-- Main Content -->
     <div class="container">
       <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-        
-          <?php
-          /*
-          + published date is the timestamp of version 1
-          + TODO: resolve link to show: /article/normalized_title.html
-          + TODO: pagination
-          + TODO: entry id is used to show the post, that is the normalized_name of the first version of the post,
-                  but the admin might want to change it to improve the URL for SEO, that should be possible setting
-                  a custom id or permurl.
-          */
-          foreach ($index['posts'] as $entry)
-          {
-             $versions = $entry['versions'];
-             $post = get_latest_post_version($versions);
-             
-             // $post['timestamp'] is the update timestamp if there is more than 1 version
-             $published_timestamp = get_post_published_date($versions);
-             $date = date("F j, Y, g:i a", $published_timestamp);
-             
-             echo <<<EX
-                <div class="post-preview">
-                  <a href="article/{$entry['id']}.html">
-                    <h2 class="post-title">{$post['title']}</h2>
-                    <h3 class="post-subtitle">{$post['summary']}</h3>
-                  </a>
-                  <p class="post-meta">Posted by <a href="#">{$post['author']}</a> on {$date}</p>
-                </div>
-                <hr>
-EX;
-          }
-          ?>
-        
-          <!-- Pager -->
-          <div class="clearfix">
-            <a class="btn btn-secondary float-right" href="#">Older Posts &rarr;</a>
+        <?php
+        //phpinfo();
+        if (array_key_exists('feedback', $_SESSION))
+        {
+           echo $_SESSION['feedback'];
+           unset($_SESSION['feedback']);
+        }
+        ?>
+        <form action="admin/login" method="post" id="create_form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" value="" required="true" />
           </div>
-        </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" value="" required="true" />
+          </div>
+          <button type="submit" name="submit" class="btn btn-primary">Login</button>
+        </form>
       </div>
     </div>
     

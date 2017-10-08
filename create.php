@@ -26,6 +26,11 @@
     <!-- Custom styles for this template -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
     
+    <!-- tags -->
+    <link href="vendor/jqueryui-autocomplete/jquery-ui.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap-tokenfield/css/tokenfield-typeahead.min.css" rel="stylesheet">
+    
     <style>
       #edit-menu {
          position: absolute;
@@ -92,14 +97,27 @@
     <!-- Main Content -->
     <div class="container">
       <div class="row">
-        <form action="" method="post" id="create_form">
+        <form action="admin/create" method="post" id="create_form">
           <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" name="title" value="" />
+            <input type="text" name="title" value="" class="form-control" required />
           </div>
           <div class="form-group">
             <label for="content">Content</label>
-            <textarea id="editor" name="content"></textarea>
+            <textarea id="editor" name="content" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="summary">Summary</label>
+            <textarea name="summary" class="form-control"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" name="tags" id="tags" value="" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Lang</label><br/>
+            <label>EN <input type="radio" name="lang" value="en" class="form-control" checked="checked" /></label>
+            <label>ES <input type="radio" name="lang" value="es" class="form-control" /></label>
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
         </form>
@@ -143,13 +161,19 @@
       </div>
     </footer>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="vendor/popper/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/clean-blog.min.js"></script>
     <script src="vendor/tinymce/tinymce.min.js"></script>
+    
+    <!-- tags -->
+    <script src="vendor/jqueryui-autocomplete/jquery-ui.min.js"></script>
+    <script src="vendor/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
     <script>
       $(document).ready(function() {
+        
         tinymce.init({
           selector:'#editor',
           height: 600,
@@ -168,6 +192,14 @@
         }).then(function(editors){
           //$('.mce-tinymce').css('border','0');
         });
+        
+        $('#tags').tokenfield({
+           autocomplete: {
+             source: ['openEHR','CaboLabs','EHR','EHRServer','Education','Events','CDR','SNOMED-CT','HL7','Open Source','Platforms'],
+             delay: 100
+           },
+           //showAutocompleteOnFocus: true
+         });
       });
 
       $("#create_form").submit(function(e) {
@@ -181,8 +213,10 @@
         // makes tinyMCE to save the content to the textarea for submit
         // without this, the first submit has empty text
         tinyMCE.get("editor").save();
+        
+        console.log( $("#create_form").serialize() );
 
-        /*
+        
         $.ajax({
           type: "POST",
           url: url,
@@ -191,14 +225,17 @@
           {
             console.log(data);
             // Update patient table with new patient
+            /*
             $('#list_container').html(data);
             $('#create_modal').modal('hide');
+            */
           },
           error: function(response, statusText)
           {
             //console.log(JSON.parse(response.responseText));
-            
+            console.log(response);
             // Display validation errors on for fields
+            /*
             errors = JSON.parse(response.responseText);
             $.each(errors, function( index, error ) {
               console.log(error.defaultMessage);
@@ -207,9 +244,10 @@
 
               if (error.field == 'text') $('.mce-tinymce').addClass('form-control'); // shows border
             });
+            */
           }
         });
-        */
+        
 
         e.preventDefault();
       });
