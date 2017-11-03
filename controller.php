@@ -111,7 +111,13 @@ else
                exit();
             break;
             case "create":
-               print_r($_POST);
+            
+               include('create.php');
+               
+               exit();
+            break;
+            case "save":
+               //print_r($_POST);
                /*
                Array
                (
@@ -135,11 +141,23 @@ else
                create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
                exit();
             break;
-            case "save":
-            break;
             case "edit":
+               //print_r($_GET);
+               
+               $versions = get_post_versions($_GET['article']);
+               $post = get_latest_post_version($versions);
+               $contents = get_post_contents($post);
+               
+               include('edit.php');
+               
+               exit();
             break;
             case "update":
+            
+               $article = $_POST['article'];
+               
+               // TODO: create new version
+            
             break;
          }
       break;

@@ -7,7 +7,7 @@
     
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Bog</title>
+    <title>Blog</title>
 
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
@@ -47,25 +47,15 @@
   </head>
   <body>
     <?php include('nav.php'); ?>
-    
-    <!-- edit menu -->
-    <!--
-    <nav id="edit-menu">
-      <div class="list-group">
-        <a href="index.php" class="list-group-item list-group-item-action">View</a>
-        <a href="#" class="list-group-item list-group-item-action">Edit</a>
-        <a href="#" class="list-group-item active">Create</a>
-      </div>
-    </nav>
-    -->
+
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('<?=$_base_dir;?>/img/home-bg.jpg')">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Clean Blog</h1>
-              <span class="subheading">A Blog Theme by Start Bootstrap</span>
+              <h1>Edit article</h1>
+              <span class="subheading">dfghfdhgdfhgdfgdfdfghfdg</span>
             </div>
           </div>
         </div>
@@ -75,29 +65,30 @@
     <!-- Main Content -->
     <div class="container">
       <div class="row">
-        <form action="admin/save" method="post" id="create_form">
+        <form action="admin/update" method="post" id="create_form">
+          <input type="hidden" name="article" value="<?=$_GET['article']?>" />
           <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" name="title" value="" class="form-control" required />
+            <input type="text" name="title" value="<?=$post['title']?>" class="form-control" required />
           </div>
           <div class="form-group">
             <label for="content">Content</label>
-            <textarea id="editor" name="content" required></textarea>
+            <textarea id="editor" name="content" required><?=$contents?></textarea>
           </div>
           <div class="form-group">
             <label for="summary">Summary</label>
-            <textarea name="summary" class="form-control"></textarea>
+            <textarea name="summary" class="form-control"><?=$post['summary']?></textarea>
           </div>
           <div class="form-group">
             <label for="tags">Tags</label>
-            <input type="text" name="tags" id="tags" value="" class="form-control" />
+            <input type="text" name="tags" id="tags" value="<?=tags_array_to_csv_string($post['tags'])?>" class="form-control" />
           </div>
           <div class="form-group">
             <label>Lang</label><br/>
-            <label>EN <input type="radio" name="lang" value="en" class="form-control" checked="checked" /></label>
-            <label>ES <input type="radio" name="lang" value="es" class="form-control" /></label>
+            <label>EN <input type="radio" name="lang" value="en" class="form-control" <?=($post['lang']=='en')?'checked="checked"':''?> /></label>
+            <label>ES <input type="radio" name="lang" value="es" class="form-control" <?=($post['lang']=='es')?'checked="checked"':''?> /></label>
           </div>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </form>
       </div>
     </div>

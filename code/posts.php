@@ -199,6 +199,19 @@ function get_post_contents($post)
    return false;
 }
 
+function tags_array_to_csv_string($tags = array())
+{
+   $csv = '';
+   
+   foreach ($tags as $i => $tag)
+   {
+      $csv .= $tag;
+      if ($i < count($tags)-1) $csv .= ',';
+   }
+   
+   return $csv;
+}
+
 /*
  * === FILES ===
  */
