@@ -224,9 +224,11 @@
       /*
        * Reset form on modal open
        */
+       /*
       $('#create_modal').on('show.bs.modal', function (event) {
         $("#create_form")[0].reset();
       });
+      */
     </script>
   </body>
 </html>

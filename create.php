@@ -7,7 +7,7 @@
     
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Bog</title>
+    <title>Bolog</title>
 
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
@@ -47,17 +47,6 @@
   </head>
   <body>
     <?php include('nav.php'); ?>
-    
-    <!-- edit menu -->
-    <!--
-    <nav id="edit-menu">
-      <div class="list-group">
-        <a href="index.php" class="list-group-item list-group-item-action">View</a>
-        <a href="#" class="list-group-item list-group-item-action">Edit</a>
-        <a href="#" class="list-group-item active">Create</a>
-      </div>
-    </nav>
-    -->
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('<?=$_base_dir;?>/img/home-bg.jpg')">
       <div class="container">
@@ -165,11 +154,17 @@
           link_list: [
             {title: 'CaboLabs Home', value: 'https://cabolabs.com'},
             {title: 'CaboLabs Blog', value: 'https://cabolabs.com/blog'}
-          ] // https://www.tinymce.com/docs/plugins/link/
+          ], // https://www.tinymce.com/docs/plugins/link/
+          setup: function (editor) {
+             editor.on('change', function (e) {
+                 editor.save();
+             });
+          }
           //border: 0
         }).then(function(editors){
           //$('.mce-tinymce').css('border','0');
         });
+        
         
         $('#tags').tokenfield({
            autocomplete: {
@@ -178,10 +173,21 @@
            },
            //showAutocompleteOnFocus: true
          });
+         
+         
       });
+      
+      $("[type='sumbit']").on("click", function(e){
+            console.log("click");
+         });
+         $("#create_form").on("submit", function(e){
+            console.log("submit2");
+         });
 
       $("#create_form").submit(function(e) {
 
+      console.log('submit');
+      
         var url = this.action;
 
         // Reset validation
@@ -233,9 +239,11 @@
       /*
        * Reset form on modal open
        */
+       /*
       $('#create_modal').on('show.bs.modal', function (event) {
         $("#create_form")[0].reset();
       });
+      */
     </script>
   </body>
 </html>
