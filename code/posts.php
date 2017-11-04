@@ -21,6 +21,8 @@ function create_post($title, $text, $summary, $tags = array(), $author, $lang, $
    write_file($file, $text);
    
    update_post_index($id, $title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, '');
+   
+   return $id;
 }
 
 /*

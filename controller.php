@@ -138,9 +138,9 @@ else
                $author  = $_SESSION['user.name'];
                $lang    = $_POST['lang'];
                
-               create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
+               $id = create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
                
-               // TODO: json result
+               echo json_encode(array('message'=>'Article created', 'status'=>'ok', 'article'=>$id));
                
                exit();
             break;
@@ -157,8 +157,7 @@ else
             break;
             case "update":
             
-               $article = $_POST['article'];
-               
+               $id      = $_POST['article'];
                $title   = $_POST['title'];
                $text    = $_POST['content'];
                $summary = $_POST['summary'];
@@ -169,9 +168,9 @@ else
                $author  = $_SESSION['user.name'];
                $lang    = $_POST['lang'];
                
-               update_post($article, $title, $text, $summary, $tags, $author, $lang, $custom_name = '');
+               update_post($id, $title, $text, $summary, $tags, $author, $lang, $custom_name = '');
             
-               echo json_encode(array('message'=>'Article updated'));
+               echo json_encode(array('message'=>'Article updated', 'status'=>'ok', 'article'=>$id));
                exit();
             break;
             default:

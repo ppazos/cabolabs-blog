@@ -7,7 +7,7 @@
     
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Bolog</title>
+    <title>New article</title>
 
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
@@ -43,6 +43,9 @@
       form input {
          width: 100%;
       }
+      .invalid {
+        box-shadow: 0 0 1.5px 1px red;
+      }
     </style>
   </head>
   <body>
@@ -53,8 +56,8 @@
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Clean Blog</h1>
-              <span class="subheading">A Blog Theme by Start Bootstrap</span>
+              <h1>New article</h1>
+              <span class="subheading"></span>
             </div>
           </div>
         </div>
@@ -67,11 +70,11 @@
         <form action="<?=$_base_dir;?>/admin/save" method="post" id="create_form">
           <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" name="title" value="" class="form-control" required />
+            <input type="text" name="title" value="" class="form-control" />
           </div>
           <div class="form-group">
             <label for="content">Content</label>
-            <textarea id="editor" name="content" required></textarea>
+            <textarea id="editor" name="content"></textarea>
           </div>
           <div class="form-group">
             <label for="summary">Summary</label>
@@ -91,42 +94,7 @@
       </div>
     </div>
     
-    <hr>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <ul class="list-inline text-center">
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <?php include('footer.php'); ?>
     
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
@@ -151,15 +119,19 @@
           //menubar: "insert",
           toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent link",
           default_link_target: "_blank",
-          link_list: [
+          link_list: [ // https://www.tinymce.com/docs/plugins/link/
             {title: 'CaboLabs Home', value: 'https://cabolabs.com'},
             {title: 'CaboLabs Blog', value: 'https://cabolabs.com/blog'}
-          ], // https://www.tinymce.com/docs/plugins/link/
+          ]
+          /*, 
           setup: function (editor) {
-             editor.on('change', function (e) {
-                 editor.save();
-             });
+            
+            editor.on('change', function (e) {
+              console.log('change');
+              editor.save();
+            });
           }
+          */
           //border: 0
         }).then(function(editors){
           //$('.mce-tinymce').css('border','0');
@@ -173,77 +145,78 @@
            },
            //showAutocompleteOnFocus: true
          });
-         
-         
       });
       
-      $("[type='sumbit']").on("click", function(e){
-            console.log("click");
-         });
-         $("#create_form").on("submit", function(e){
-            console.log("submit2");
-         });
-
-      $("#create_form").submit(function(e) {
-
-      console.log('submit');
+      // manual validation of content
+      var validate_form = function() {
+         
+        error = false;
+        
+        // turn off invalid
+        $('input:text, textarea', '#create_form').removeClass('invalid');
+        
+        // validate title
+        if ($("[name=title]").val() == '')
+        {
+          $("[name=title]").addClass('invalid');
+          error = true;
+        }
+        
+        // validate editor
+        tinyMCE.get("editor").save();
+        if ($("[name=content]").val() == '')
+        {
+          $('.mce-tinymce').addClass('invalid');
+          error = true;
+        }
+        
+        return !error;
+      };
       
-        var url = this.action;
+      
+      // form submit validates and submits via ajax
+      $(':submit').on('click', function(e) {
+         
+        e.preventDefault();
+        
+        if (validate_form())
+        {
+          // submit for via AJAX
+          send_create_post();
+        }
+      });
+      
 
-        // Reset validation
-        $('input').parent().removeClass('has-danger');
-        $('input').removeClass('form-control-danger');
+      var send_create_post = function() {
+
+        form = $('#create_form');
+        var url = form[0].action;
 
         // makes tinyMCE to save the content to the textarea for submit
         // without this, the first submit has empty text
         tinyMCE.get("editor").save();
         
-        console.log( $("#create_form").serialize() );
-
-        
         $.ajax({
           type: "POST",
           url: url,
-          data: $("#create_form").serialize(),
+          data: form.serialize(),
+          dataType: 'json',
           success: function(data, statusText, response)
           {
-            console.log(data);
-            // Update patient table with new patient
-            /*
-            $('#list_container').html(data);
-            $('#create_modal').modal('hide');
-            */
+            //console.log(data, data['status']);
+            
+            if (data['status'] == 'ok')
+            {
+              window.location.href = '<?=$_base_dir;?>/article/'+ data['article'] +'.html';
+            }
           },
           error: function(response, statusText)
           {
             //console.log(JSON.parse(response.responseText));
             console.log(response);
-            // Display validation errors on for fields
-            /*
-            errors = JSON.parse(response.responseText);
-            $.each(errors, function( index, error ) {
-              console.log(error.defaultMessage);
-              $('[name='+error.field+']').parent().addClass('has-danger'); // shows border on form-control children
-              $('[name='+error.field+']').addClass('form-control-danger'); // shows icon if input
-
-              if (error.field == 'text') $('.mce-tinymce').addClass('form-control'); // shows border
-            });
-            */
           }
         });
-        
-
-        e.preventDefault();
-      });
-
-      /*
-       * Reset form on modal open
-       */
-       /*
-      $('#create_modal').on('show.bs.modal', function (event) {
-        $("#create_form")[0].reset();
-      });
-      */
+      };
     </script>
   </body>
 </html>

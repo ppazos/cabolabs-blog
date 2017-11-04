@@ -70,6 +70,10 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
         
+          <?php if ( count($index['posts']) == 0) : ?>
+            <h1>We don't have articles yet, stay tuned</h1>
+          <?php endif;?>
+        
           <?php
           /*
           + published date is the timestamp of version 1
@@ -81,7 +85,6 @@
           */
           foreach ($index['posts'] as $id => $versions)
           {
-             //$versions = $entry['versions'];
              $post = get_latest_post_version($versions);
              
              // $post['timestamp'] is the update timestamp if there is more than 1 version
@@ -101,50 +104,16 @@ EX;
           }
           ?>
         
-          <!-- Pager -->
+          <!-- Pager 
           <div class="clearfix">
             <a class="btn btn-secondary float-right" href="#">Older Posts &rarr;</a>
           </div>
+          -->
         </div>
       </div>
     </div>
     
-    <hr>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <ul class="list-inline text-center">
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <?php include('footer.php'); ?>
     
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
