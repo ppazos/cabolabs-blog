@@ -26,9 +26,20 @@ function create_post($title, $text, $summary, $tags = array(), $author, $lang, $
 /*
  * Updates post file (generating a new version) and updates the post index.
  */
-function update_post($title, $text, $tags = array(), $author, $lang, $custom_name = '')
+function update_post($id, $title, $text, $summary, $tags = array(), $author, $lang, $custom_name = '')
 {
+   $normalized_title = normalized_title($title);
+   
    // Need to check the current latest version to pass it to the updated_post_index
+   $versions = get_post_versions($id);
+   $post = get_latest_post_version($versions);
+   $latest_version_num = $post['version'];
+   
+   $file = 'posts/'. $id .'.v'.($latest_version_num+1);
+   
+   write_file($file, $text);
+   
+   update_post_index($id, $title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, '', ($latest_version_num+1));
 }
 
 /*
@@ -81,7 +92,7 @@ function get_post_index()
  */
 function load_post_index()
 {
-   $index_path = 'conf/metadata.json';
+   $index_path = 'conf/metadata2.json';
    if (is_file($index_path))
    {
       $json = file_get_contents ($index_path);
@@ -99,10 +110,14 @@ function load_post_index()
  */
 function update_post_index($id, $title, $text, $summary, $tags = array(), $author, $lang, $file_path, $normalized_title, $custom_name = '', $version = 1)
 {
-   // create index entry for post version object
-   $post_version = array(  // entry on the post index
-      "id" => $id, // for now the id is the normalized title
-      "versions" => array( // versions of this post
+   $index = get_post_index();
+   $post_versions = get_post_versions($id);
+   
+   // is a new post?
+   if ($post_versions === false)
+   {
+      // create index entry for post version object
+      $post_version = array( // versions of this post
          array(            // this post
            "title"     => $title,
            "summary"   => $summary,
@@ -114,16 +129,31 @@ function update_post_index($id, $title, $text, $summary, $tags = array(), $autho
            "lang"      => $lang,
            "version"   => $version
          )
-      )
-   );
-   
-   // get index and put the new entry at the beggining
-   $index = get_post_index();
-   array_unshift($index['posts'], $post_version);
+      );
+      
+      $index['posts'][$id] = $post_version;
+   }
+   else // create a new version of an existing post
+   {
+      $version = array(
+        "title"     => $title,
+        "summary"   => $summary,
+        "normalized_title" => $normalized_title,
+        "timestamp" => time(),
+        "tags"      => $tags,
+        "file"      => $file_path,
+        "author"    => $author,
+        "lang"      => $lang,
+        "version"   => $version
+      );
+      
+      // add at the begining of the versions
+      array_unshift($index['posts'][$id], $version);
+   }
    
    // update the index file
    $json = json_encode($index);
-   $index_path = 'conf/metadata.json';
+   $index_path = 'conf/metadata2.json';
    write_file($index_path, $json);
    
    // reload index to session
@@ -177,10 +207,15 @@ function get_post_published_date($post_versions)
 function get_post_versions($id)
 {
    $index = get_post_index();
+   /*
    foreach ($index['posts'] as $entry)
    {
       if ($entry['id'] == $id) return $entry['versions'];
    }
+   */
+   
+   if (isset($index['posts'][$id])) return $index['posts'][$id];
+   
    return false;
 }
 

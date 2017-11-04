@@ -75,7 +75,7 @@
     <!-- Main Content -->
     <div class="container">
       <div class="row">
-        <form action="admin/save" method="post" id="create_form">
+        <form action="<?=$_base_dir;?>/admin/save" method="post" id="create_form">
           <div class="form-group">
             <label for="title">Title</label>
             <input type="text" name="title" value="" class="form-control" required />

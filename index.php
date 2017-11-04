@@ -79,9 +79,9 @@
                   but the admin might want to change it to improve the URL for SEO, that should be possible setting
                   a custom id or permurl.
           */
-          foreach ($index['posts'] as $entry)
+          foreach ($index['posts'] as $id => $versions)
           {
-             $versions = $entry['versions'];
+             //$versions = $entry['versions'];
              $post = get_latest_post_version($versions);
              
              // $post['timestamp'] is the update timestamp if there is more than 1 version
@@ -90,7 +90,7 @@
              
              echo <<<EX
                 <div class="post-preview">
-                  <a href="article/{$entry['id']}.html">
+                  <a href="article/{$id}.html">
                     <h2 class="post-title">{$post['title']}</h2>
                     <h3 class="post-subtitle">{$post['summary']}</h3>
                   </a>

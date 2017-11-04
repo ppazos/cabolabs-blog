@@ -65,7 +65,7 @@
     <!-- Main Content -->
     <div class="container">
       <div class="row">
-        <form action="admin/update" method="post" id="create_form">
+        <form action="<?=$_base_dir;?>/admin/update" method="post" id="create_form">
           <input type="hidden" name="article" value="<?=$_GET['article']?>" />
           <div class="form-group">
             <label for="title">Title</label>

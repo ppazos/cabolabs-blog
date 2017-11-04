@@ -30,7 +30,7 @@ else
    {
       case "article": // show article
          $normalized_name_with_extension = $parts[2];
-         $normalized_name = basename($normalized_name_with_extension, '.html');
+         $normalized_name = basename($normalized_name_with_extension, '.html'); // this is the id not the normalized name
          $versions = get_post_versions($normalized_name);
          $post = get_latest_post_version($versions);
          $contents = get_post_contents($post);
@@ -139,6 +139,9 @@ else
                $lang    = $_POST['lang'];
                
                create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
+               
+               // TODO: json result
+               
                exit();
             break;
             case "edit":
@@ -156,9 +159,23 @@ else
             
                $article = $_POST['article'];
                
-               // TODO: create new version
+               $title   = $_POST['title'];
+               $text    = $_POST['content'];
+               $summary = $_POST['summary'];
+               
+               // if tags is empty, explode has one empty element, filter removes it
+               // trime removes whitespaces on each tag.
+               $tags    = array_map('trim', array_filter( explode(',', $_POST['tags']) ));
+               $author  = $_SESSION['user.name'];
+               $lang    = $_POST['lang'];
+               
+               update_post($article, $title, $text, $summary, $tags, $author, $lang, $custom_name = '');
             
+               echo json_encode(array('message'=>'Article updated'));
+               exit();
             break;
+            default:
+               echo "not found ". $action;
          }
       break;
       case "logout": // /logout, same as /admin/logout
