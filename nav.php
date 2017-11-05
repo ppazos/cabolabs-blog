@@ -10,9 +10,11 @@
        <li class="nav-item">
          <a class="nav-link" href="/blog">Home</a>
        </li>
+       <!--
        <li class="nav-item">
          <a class="nav-link" href="about.html">About</a>
        </li>
+       -->
        <li class="nav-item">
          <a class="nav-link" href="https://www.cabolabs.com">Back to CaboLabs.com</a>
        </li>

@@ -52,8 +52,7 @@
     <?php endif; ?>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
-      <div class="container">
+    <header class="masthead" style="background-image: url('<?=$_base_dir;?>/img/home-bg.jpg')">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
@@ -62,7 +61,6 @@
             </div>
           </div>
         </div>
-      </div>
     </header>
 
     <!-- Main Content -->
@@ -75,6 +73,32 @@
           <?php endif;?>
         
           <?php
+          // posts in reverse order: first the latest
+          $latest_versions = array();
+          foreach ($index['posts'] as $id => $versions)
+          {
+             $post = get_latest_post_version($versions);
+             $timestamp = get_post_published_date($versions);
+             $post['id'] = $id;
+             $latest_versions[$timestamp] = $post;
+          }
+          $latest_versions  = array_reverse($latest_versions , true);
+          foreach ($latest_versions as $timestamp => $post)
+          {
+             $date = date("F j, Y, g:i a", $timestamp);
+             echo <<<EX
+                <div class="post-preview">
+                  <h2 class="post-title">
+                    <a href="{$_base_dir}/article/{$post['id']}.html">{$post['title']}</a>
+                  </h2>
+                  <p class="post-meta">Posted by <a href="#">{$post['author']}</a> on {$date}</p>
+                  <p class="post-subtitle">{$post['summary']}</p>
+                  <div align="right"><a href="{$_base_dir}/article/{$post['id']}.html"><button class="btn">Read more <i class="fa fa-arrow-right" aria-hidden="true"></i></button></a></div>
+                </div>
+                <hr>
+EX;
+          }
+             
           /*
           + published date is the timestamp of version 1
           + TODO: resolve link to show: /article/normalized_title.html
@@ -83,6 +107,7 @@
                   but the admin might want to change it to improve the URL for SEO, that should be possible setting
                   a custom id or permurl.
           */
+          /*
           foreach ($index['posts'] as $id => $versions)
           {
              $post = get_latest_post_version($versions);
@@ -102,6 +127,7 @@
                 <hr>
 EX;
           }
+          */
           ?>
         
           <!-- Pager 

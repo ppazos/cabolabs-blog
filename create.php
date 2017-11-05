@@ -52,16 +52,14 @@
     <?php include('nav.php'); ?>
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('<?=$_base_dir;?>/img/home-bg.jpg')">
-      <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="site-heading">
+            <div class="page-heading">
               <h1>New article</h1>
               <span class="subheading"></span>
             </div>
           </div>
         </div>
-      </div>
     </header>
 
     <!-- Main Content -->
@@ -115,9 +113,9 @@
           resize: false,
           menubar: false,
           branding: false,
-          plugins: "link",
+          plugins: "link image",
           //menubar: "insert",
-          toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent link",
+          toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent link | image",
           default_link_target: "_blank",
           link_list: [ // https://www.tinymce.com/docs/plugins/link/
             {title: 'CaboLabs Home', value: 'https://cabolabs.com'},
