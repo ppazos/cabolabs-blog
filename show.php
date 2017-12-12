@@ -34,6 +34,9 @@
          top: 100px;
          right: 20px;
       }
+      .mx-auto img {
+         max-width: 100%;
+      }
     </style>
   </head>
   <body>

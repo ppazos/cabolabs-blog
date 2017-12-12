@@ -37,6 +37,9 @@
          top: 100px;
          right: 20px;
       }
+      .post-preview img {
+         max-width: 100%;
+      }
     </style>
   </head>
   <body>
