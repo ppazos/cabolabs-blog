@@ -33,6 +33,7 @@
          position: absolute;
          top: 100px;
          right: 20px;
+         z-index: 999;
       }
       .mx-auto img {
          max-width: 100%;
@@ -46,7 +47,7 @@
     <!-- edit menu -->
     <nav id="edit-menu">
       <div class="list-group">
-        <a href="<?=$_base_dir;?>/admin/edit?article=<?=$normalized_name?>" class="list-group-item list-group-item-action">Edit</a>
+        <a href="<?=$_base_dir;?>/admin/edit?article=<?=$id?>" class="list-group-item list-group-item-action">Edit</a>
         <a href="<?=$_base_dir;?>/admin/create" class="list-group-item list-group-item-action">Create</a>
       </div>
     </nav>
@@ -120,7 +121,12 @@
             
           </div>
         </div>
-      </div>
+                
+        <!-- Social buttons -->
+        <div class="addthis_inline_share_toolbox"></div>
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a31ee93ae222cf1"></script>
+        
+      </div><!-- container -->
     </article>
 
     <?php include('footer.php'); ?>
