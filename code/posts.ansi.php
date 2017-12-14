@@ -24,8 +24,10 @@ function create_post($title, $text, $summary, $tags = array(), $author, $lang, $
    {
       $summary = truncate($text);
    }
-
-   return update_post_index($id, $title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, '');
+   echo '--'.$normalized_title.'--';
+   update_post_index($id, $title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, '');
+   
+   return $id;
 }
 
 /*
@@ -49,7 +51,7 @@ function update_post($id, $title, $text, $summary, $tags = array(), $author, $la
       $summary = truncate($text);
    }
    
-   return update_post_index($id, $title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, '', ($latest_version_num+1));
+   update_post_index($id, $title, $text, $summary, $tags, $author, $lang, $file, $normalized_title, '', ($latest_version_num+1));
 }
 
 /*
@@ -57,22 +59,27 @@ function update_post($id, $title, $text, $summary, $tags = array(), $author, $la
  */
 function normalized_title($title)
 {
+   echo '//'.$title.'//';
    $normalized = trim($title);
+   echo '1\\'.$normalized.'\\';
    $normalized = strtolower($normalized);
+   echo '2\\'.$normalized.'\\';
    $normalized = str_replace(" ", "_", $normalized);
+   echo '3\\'.$normalized.'\\';
    $normalized = filter_special_chars($normalized);
+   echo '4\\'.$normalized.'\\';
    $normalized = filter_non_letters($normalized);
-
+   echo '5\\'.$normalized.'\\';
    return $normalized;
 }
 
 function filter_special_chars($string)
 {
-   $unwanted_array = array('Å '=>'S', 'Å¡'=>'s', 'Å½'=>'Z', 'Å¾'=>'z', 'Ã€'=>'A', 'Ã'=>'A', 'Ã‚'=>'A', 'Ãƒ'=>'A', 'Ã„'=>'A', 'Ã…'=>'A', 'Ã†'=>'A', 'Ã‡'=>'C', 'Ãˆ'=>'E', 'Ã‰'=>'E',
-                           'ÃŠ'=>'E', 'Ã‹'=>'E', 'ÃŒ'=>'I', 'Ã'=>'I', 'ÃŽ'=>'I', 'Ã'=>'I', 'Ã‘'=>'N', 'Ã’'=>'O', 'Ã“'=>'O', 'Ã”'=>'O', 'Ã•'=>'O', 'Ã–'=>'O', 'Ã˜'=>'O', 'Ã™'=>'U',
-                           'Ãš'=>'U', 'Ã›'=>'U', 'Ãœ'=>'U', 'Ã'=>'Y', 'Ãž'=>'B', 'ÃŸ'=>'Ss', 'Ã '=>'a', 'Ã¡'=>'a', 'Ã¢'=>'a', 'Ã£'=>'a', 'Ã¤'=>'a', 'Ã¥'=>'a', 'Ã¦'=>'a', 'Ã§'=>'c',
-                           'Ã¨'=>'e', 'Ã©'=>'e', 'Ãª'=>'e', 'Ã«'=>'e', 'Ã¬'=>'i', 'Ã­'=>'i', 'Ã®'=>'i', 'Ã¯'=>'i', 'Ã°'=>'o', 'Ã±'=>'n', 'Ã²'=>'o', 'Ã³'=>'o', 'Ã´'=>'o', 'Ãµ'=>'o',
-                           'Ã¶'=>'o', 'Ã¸'=>'o', 'Ã¹'=>'u', 'Ãº'=>'u', 'Ã»'=>'u', 'Ã¼'=>'u', 'Ã½'=>'y', 'Ã½'=>'y', 'Ã¾'=>'b', 'Ã¿'=>'y' );
+   $unwanted_array = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                           'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                           'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                           'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                           'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
    return strtr($string, $unwanted_array);
 }
 
@@ -129,7 +136,7 @@ function update_post_index($id, $title, $text, $summary, $tags = array(), $autho
    if ($post_versions === false)
    {
       // create index entry for post version object
-      $post_and_version = array( // versions of this post
+      $post_version = array( // versions of this post
          array(            // this post
            "title"     => $title,
            "summary"   => $summary,
@@ -143,13 +150,11 @@ function update_post_index($id, $title, $text, $summary, $tags = array(), $autho
          )
       );
       
-      $index['posts'][$id] = $post_and_version;
-      
-      $post_version = $post_and_version[0]; // want to return only the version
+      $index['posts'][$id] = $post_version;
    }
    else // create a new version of an existing post
    {
-      $post_version = array(
+      $version = array(
         "title"     => $title,
         "summary"   => $summary,
         "normalized_title" => $normalized_title,
@@ -162,21 +167,19 @@ function update_post_index($id, $title, $text, $summary, $tags = array(), $autho
       );
       
       // add at the begining of the versions
-      array_unshift($index['posts'][$id], $post_version);
+      array_unshift($index['posts'][$id], $version);
    }
    
    // update the index file
    $json = json_encode($index, JSON_UNESCAPED_UNICODE);
+   echo '++'.$normalized_title.'++';
+   echo '**'.$json.'**';
    
    $index_path = 'conf/metadata2.json';
    write_file($index_path, $json);
    
    // reload index to session
    load_post_index();
-   
-   // injects the id in the version to be used by the caller
-   $post_version['id'] = $id;
-   return $post_version;
 }
 
 /*

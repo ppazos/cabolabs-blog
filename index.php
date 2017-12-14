@@ -36,6 +36,7 @@
          position: absolute;
          top: 100px;
          right: 20px;
+         z-index: 999;
       }
       .post-preview img {
          max-width: 100%;
@@ -92,7 +93,7 @@
              echo <<<EX
                 <div class="post-preview">
                   <h2 class="post-title">
-                    <a href="{$_base_dir}/article/{$post['id']}.html">{$post['title']}</a>
+                    <a href="{$_base_dir}/article/{$post['normalized_title']}-{$post['id']}.html">{$post['title']}</a>
                   </h2>
                   <p class="post-meta">Posted by <a href="#">{$post['author']}</a> on {$date}</p>
                   <p class="post-subtitle">{$post['summary']}</p>

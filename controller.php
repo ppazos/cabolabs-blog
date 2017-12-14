@@ -13,6 +13,7 @@ echo $_rel_path;
 */
 
 include('code/posts.php');
+include('code/password.php');
 
 if ($_rel_path == '/')
 {
@@ -29,9 +30,13 @@ else
    switch ($domain)
    {
       case "article": // show article
-         $normalized_name_with_extension = $parts[2];
-         $normalized_name = basename($normalized_name_with_extension, '.html'); // this is the id not the normalized name
-         $versions = get_post_versions($normalized_name);
+         $normalized_name_with_extension = $parts[2]; // normalized_name-postID.html
+         $pos = strrpos($normalized_name_with_extension, "-");
+         $id_and_extension = substr($normalized_name_with_extension, $pos+1); // postID.html
+         $id = basename($id_and_extension, '.html'); // this is the id not the normalized name
+         
+         // TODO: 404 if not found
+         $versions = get_post_versions($id);
          $post = get_latest_post_version($versions);
          $contents = get_post_contents($post);
 
@@ -75,15 +80,16 @@ else
                      exit();
                   }
                   
-                  /*
+
                   if (!password_verify($_POST['password'], $user['password']))
                   {
+                     echo 'password_verify';
                      // password doesnt match
                      $_SESSION['feedback'] = 'login failed 2';
                      header('Location: ' . $_SERVER['HTTP_REFERER'], true, 302);
                      exit();
                   }
-                  */
+
                   
                   $_SESSION['auth'] = true;
                   $_SESSION['user.name'] = $user['name']; // for post create author
@@ -138,10 +144,9 @@ else
                $author  = $_SESSION['user.name'];
                $lang    = $_POST['lang'];
                
-               $id = create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
+               $post = create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
                
-               echo json_encode(array('message'=>'Article created', 'status'=>'ok', 'article'=>$id));
-               
+               echo json_encode(array('message'=>'Article created', 'status'=>'ok', 'redirect'=>$_base_dir.'/article/'.$post['normalized_title'].'-'.$post['id'].'.html'));
                exit();
             break;
             case "edit":
@@ -152,7 +157,6 @@ else
                $contents = get_post_contents($post);
                
                include('edit.php');
-               
                exit();
             break;
             case "update":
@@ -168,9 +172,9 @@ else
                $author  = $_SESSION['user.name'];
                $lang    = $_POST['lang'];
                
-               update_post($id, $title, $text, $summary, $tags, $author, $lang, $custom_name = '');
+               $post = update_post($id, $title, $text, $summary, $tags, $author, $lang, $custom_name = '');
             
-               echo json_encode(array('message'=>'Article updated', 'status'=>'ok', 'article'=>$id));
+               echo json_encode(array('message'=>'Article updated', 'status'=>'ok', 'redirect'=>$_base_dir.'/article/'.$post['normalized_title'].'-'.$post['id'].'.html'));
                exit();
             break;
             default:
