@@ -36,6 +36,7 @@
          position: absolute;
          top: 100px;
          right: 20px;
+         z-index: 999;
       }
       form {
          width: 100%;
@@ -114,7 +115,7 @@
           branding: false,
           plugins: "link image",
           //menubar: "insert",
-          toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent link | image",
+          toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent link unlink | image | removeformat",
           default_link_target: "_blank",
           link_list: [
             {title: 'CaboLabs Home', value: 'https://cabolabs.com'},
@@ -153,7 +154,7 @@
             
             if (data['status'] == 'ok')
             {
-              window.location.href = '<?=$_base_dir;?>/article/'+ data['article'] +'.html';
+              window.location.href = data['redirect'];
             }
           },
           error: function(response, statusText)
