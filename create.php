@@ -114,10 +114,11 @@
           resize: false,
           menubar: false,
           branding: false,
-          plugins: "link image",
+          plugins: "link image media",
           //menubar: "insert",
-          toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent link unlink | image | removeformat",
+          toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent link unlink | image media | removeformat",
           default_link_target: "_blank",
+          media_live_embeds: true, // https://www.tinymce.com/docs/plugins/media/
           link_list: [ // https://www.tinymce.com/docs/plugins/link/
             {title: 'CaboLabs Home', value: 'https://cabolabs.com'},
             {title: 'CaboLabs Blog', value: 'https://cabolabs.com/blog'}
