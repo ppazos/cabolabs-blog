@@ -76,16 +76,54 @@
           <div class="col-lg-8 col-md-10 mx-auto">
           
             <?=$contents;?>
+
+            <hr/>
           
           </div>
         </div>
-                
+        
+        
+        <!-- disqus -->
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div id="disqus_thread"></div>
+            <script>
+
+             /**
+             *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+             *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+             // <?=$_SERVER['HTTP_HOST']?>
+             
+             <?php
+             $protocol = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://');
+             ?>
+             
+             var disqus_config = function () {
+                this.page.url = '<?=$protocol?><?=$_SERVER['SERVER_NAME']?><?=$_base_dir?>/article/<?=$post['normalized_title']?>-<?=$id?>.html';
+                this.page.identifier = '<?=$id?>';
+             };
+             
+             (function() { // DON'T EDIT BELOW THIS LINE
+             var d = document, s = d.createElement('script');
+             s.src = 'https://cabolabs-blog.disqus.com/embed.js';
+             s.setAttribute('data-timestamp', +new Date());
+             (d.head || d.body).appendChild(s);
+             })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          </div>
+        </div>
+        
+        <hr/>
+            
         <!-- Social buttons -->
         <div class="addthis_inline_share_toolbox"></div>
         <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a31ee93ae222cf1"></script>
         
       </div><!-- container -->
     </article>
+    
+              
 
     <?php include('footer.php'); ?>
 
