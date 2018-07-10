@@ -4,15 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>New article</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <meta name="description" content="CaboLabs Health Informatics, Standards and Interoperability, professional services, project consultancy, training on standards">
+    <meta name="keywords" content="cabolabs, medical informatics, health informatics, standards, interoperability, integration, hl7, dicom, openehr, cda, fhir, smart, mirth, mirth connect, consultancy, training, coaching, clinical databases, repositories, audit">
+    <meta name="author" content="Pablo Pazos Gutierrez">
+
+    <title>CaboLabs Blog - New article</title>
 
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
-    
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -25,12 +28,12 @@
 
     <!-- Custom styles for this template -->
     <link href="<?=$_base_dir;?>/css/clean-blog.min.css" rel="stylesheet">
-    
+
     <!-- tags -->
     <link href="<?=$_base_dir;?>/vendor/jqueryui-autocomplete/jquery-ui.min.css" rel="stylesheet">
     <link href="<?=$_base_dir;?>/vendor/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css" rel="stylesheet">
     <link href="<?=$_base_dir;?>/vendor/bootstrap-tokenfield/css/tokenfield-typeahead.min.css" rel="stylesheet">
-    
+
     <style>
       #edit-menu {
          position: absolute;
@@ -92,22 +95,22 @@
         </form>
       </div>
     </div>
-    
+
     <?php include('footer.php'); ?>
-    
+
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="<?=$_base_dir;?>/vendor/popper/popper.min.js"></script>
     <script src="<?=$_base_dir;?>/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=$_base_dir;?>/js/clean-blog.min.js"></script>
     <script src="<?=$_base_dir;?>/vendor/tinymce/tinymce.min.js"></script>
-    
+
     <!-- tags -->
     <script src="<?=$_base_dir;?>/vendor/jqueryui-autocomplete/jquery-ui.min.js"></script>
     <script src="<?=$_base_dir;?>/vendor/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
     <script>
       $(document).ready(function() {
-        
+
         tinymce.init({
           selector:'#editor',
           height: 600,
@@ -123,9 +126,9 @@
             {title: 'CaboLabs Home', value: 'https://cabolabs.com'},
             {title: 'CaboLabs Blog', value: 'https://cabolabs.com/blog'}
           ]
-          /*, 
+          /*,
           setup: function (editor) {
-            
+
             editor.on('change', function (e) {
               console.log('change');
               editor.save();
@@ -136,8 +139,8 @@
         }).then(function(editors){
           //$('.mce-tinymce').css('border','0');
         });
-        
-        
+
+
         $('#tags').tokenfield({
            autocomplete: {
              source: ['openEHR','CaboLabs','EHR','EHRServer','Education','Events','CDR','SNOMED-CT','HL7','Open Source','Platforms'],
@@ -146,22 +149,22 @@
            //showAutocompleteOnFocus: true
          });
       });
-      
+
       // manual validation of content
       var validate_form = function() {
-         
+
         error = false;
-        
+
         // turn off invalid
         $('input:text, textarea', '#create_form').removeClass('invalid');
-        
+
         // validate title
         if ($("[name=title]").val() == '')
         {
           $("[name=title]").addClass('invalid');
           error = true;
         }
-        
+
         // validate editor
         tinyMCE.get("editor").save();
         if ($("[name=content]").val() == '')
@@ -169,23 +172,23 @@
           $('.mce-tinymce').addClass('invalid');
           error = true;
         }
-        
+
         return !error;
       };
-      
-      
+
+
       // form submit validates and submits via ajax
       $(':submit').on('click', function(e) {
-         
+
         e.preventDefault();
-        
+
         if (validate_form())
         {
           // submit for via AJAX
           send_create_post();
         }
       });
-      
+
 
       var send_create_post = function() {
 
@@ -195,7 +198,7 @@
         // makes tinyMCE to save the content to the textarea for submit
         // without this, the first submit has empty text
         tinyMCE.get("editor").save();
-        
+
         $.ajax({
           type: "POST",
           url: url,
@@ -204,7 +207,7 @@
           success: function(data, statusText, response)
           {
             //console.log(data, data['status']);
-            
+
             if (data['status'] == 'ok')
             {
               window.location.href = data['redirect'];

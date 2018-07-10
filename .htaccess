@@ -1,14 +1,15 @@
 ##  Can be commented out if causes errors, see notes above.
-Options +SymLinksIfOwnerMatch -Indexes -MultiViews 
+Options +SymLinksIfOwnerMatch -Indexes -MultiViews
 
 #
 #  mod_rewrite in use
 RewriteEngine On
-RewriteBase /blog
+#RewriteBase /blog
+#RewriteBase /cabolabs-blog
 
 # Si es un archivo fisico, dejarlo pasar.
-RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !^.*\.(css|jpe?g|gif|png|js|ico)$ [NC]
 
 # Todo va al punto de entrada
-RewriteRule (.*) controller.php [L]
+RewriteRule ^(.*)? controller.php [L]
