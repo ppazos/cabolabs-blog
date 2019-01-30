@@ -29,11 +29,10 @@
              </a>
            </li>
          </ul>
-         <p class="copyright text-muted">Copyright &copy; CaboLabs 2017</p>
+         <p class="copyright text-muted">Copyright &copy; CaboLabs <?=date("Y")?></p>
        </div>
      </div>
    </div>
  </footer>
- 
+
  <?php include('analytics.js'); ?>
- 
