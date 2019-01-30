@@ -63,7 +63,7 @@
     <!-- edit menu -->
     <nav id="edit-menu">
       <div class="list-group">
-        <a href="{$_base_dir}/admin/create" class="list-group-item list-group-item-action">Create</a>
+        <a href="<?=$_base_dir;?>/admin/create" class="list-group-item list-group-item-action">Create</a>
       </div>
     </nav>
     <?php endif; ?>
