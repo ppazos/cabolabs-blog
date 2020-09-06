@@ -10,6 +10,7 @@ $_rel_path = substr($_req_url['path'], strlen($_base_dir));
 //echo $_base_dir;
 //print_r( $_req_url );
 //echo $_rel_path;
+//echo getcwd();
 
 
 include('code/posts.php');
@@ -144,9 +145,15 @@ else
                $author  = $_SESSION['user.name'];
                $lang    = $_POST['lang'];
 
-               $post = create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
-
-               echo json_encode(array('message'=>'Article created', 'status'=>'ok', 'redirect'=>$_base_dir.'/article/'.$post['normalized_title'].'-'.$post['id'].'.html'));
+               try
+               {
+                  $post = create_post($title, $text, $summary, $tags, $author, $lang, $custom_name = '');
+                  echo json_encode(array('message'=>'Article created', 'status'=>'ok', 'redirect'=>$_base_dir.'/article/'.$post['normalized_title'].'-'.$post['id'].'.html'));
+               }
+               catch (\Exception $e)
+               {
+                  echo json_encode(array('message'=>$e->getMessage(), 'status'=>'error'));
+               }
                exit();
             break;
             case "edit":
@@ -172,9 +179,15 @@ else
                $author  = $_SESSION['user.name'];
                $lang    = $_POST['lang'];
 
-               $post = update_post($id, $title, $text, $summary, $tags, $author, $lang, $custom_name = '');
-
-               echo json_encode(array('message'=>'Article updated', 'status'=>'ok', 'redirect'=>$_base_dir.'/article/'.$post['normalized_title'].'-'.$post['id'].'.html'));
+               try
+               {
+                  $post = update_post($id, $title, $text, $summary, $tags, $author, $lang, $custom_name = '');
+                  echo json_encode(array('message'=>'Article updated', 'status'=>'ok', 'redirect'=>$_base_dir.'/article/'.$post['normalized_title'].'-'.$post['id'].'.html'));
+               }
+               catch (\Exception $e)
+               {
+                  echo json_encode(array('message'=>$e->getMessage(), 'status'=>'error'));
+               }
                exit();
             break;
             default:

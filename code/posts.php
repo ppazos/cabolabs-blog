@@ -11,7 +11,8 @@ function create_post($title, $text, $summary, $tags = array(), $author, $lang, $
 {
    $normalized_title = normalized_title($title);
    $id = uniqid();
-   $file = 'posts/'. $id .'.v1'; // the first file is random.v1, on updates it will save random.v2, random.v3, etc.
+   $file = getcwd() .'/posts/'. $id .'.v1'; // the first file is random.v1, on updates it will save random.v2, random.v3, etc.
+
    if (is_file($file))
    {
       throw new Exception('A post with the same name already exists, please provide another name or set a custom name');
@@ -40,7 +41,7 @@ function update_post($id, $title, $text, $summary, $tags = array(), $author, $la
    $post = get_latest_post_version($versions);
    $latest_version_num = $post['version'];
    
-   $file = 'posts/'. $id .'.v'.($latest_version_num+1);
+   $file = getcwd() .'/posts/'. $id .'.v'.($latest_version_num+1);
    
    write_file($file, $text);
    
@@ -104,7 +105,7 @@ function get_post_index()
  */
 function load_post_index()
 {
-   $index_path = 'conf/metadata2.json';
+   $index_path = getcwd() .'/conf/metadata2.json';
    if (is_file($index_path))
    {
       $json = file_get_contents ($index_path);
@@ -168,7 +169,7 @@ function update_post_index($id, $title, $text, $summary, $tags = array(), $autho
    // update the index file
    $json = json_encode($index, JSON_UNESCAPED_UNICODE);
    
-   $index_path = 'conf/metadata2.json';
+   $index_path = getcwd() .'/conf/metadata2.json';
    write_file($index_path, $json);
    
    // reload index to session
@@ -391,6 +392,10 @@ function write_file($filepath, $text)
    {
       fwrite($file, $text);
    }
+   else
+   {
+      throw new Exception('Error writing file at '. $filepath);
+   }
    fclose($file);
 }
 
@@ -449,7 +454,7 @@ function getFileNames($path, $match = null, $groups = null)
  */
 function get_users()
 {
-   $_path = 'conf/users.json';
+   $_path = getcwd() .'/conf/users.json';
    if (is_file($_path))
    {
       $json = file_get_contents ($_path);

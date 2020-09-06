@@ -13,8 +13,7 @@
     <title>CaboLabs Blog - New article</title>
 
     <!-- Bootstrap -->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link href="<?=$_base_dir;?>/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -42,9 +41,6 @@
          z-index: 999;
       }
       form {
-         width: 100%;
-      }
-      form input {
          width: 100%;
       }
       .invalid {
@@ -87,9 +83,19 @@
             <input type="text" name="tags" id="tags" value="" class="form-control" />
           </div>
           <div class="form-group">
-            <label>Lang</label><br/>
-            <label>EN <input type="radio" name="lang" value="en" class="form-control" checked="checked" /></label>
-            <label>ES <input type="radio" name="lang" value="es" class="form-control" /></label>
+            <label>Language</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" name="lang" type="radio" id="lang_en" value="en" checked="checked">
+            <label class="form-check-label" for="lang_en">
+              EN
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" name="lang" type="radio" id="lang_es" value="es">
+            <label class="form-check-label" for="lang_es">
+              ES
+            </label>
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
         </form>
@@ -100,8 +106,7 @@
 
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-    <script src="<?=$_base_dir;?>/vendor/popper/popper.min.js"></script>
-    <script src="<?=$_base_dir;?>/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=$_base_dir;?>/js/bootstrap.bundle.min.js"></script>
     <script src="<?=$_base_dir;?>/js/clean-blog.min.js"></script>
     <script src="<?=$_base_dir;?>/vendor/tinymce/tinymce.min.js"></script>
 
@@ -212,11 +217,15 @@
             {
               window.location.href = data['redirect'];
             }
+            else
+            {
+              alert(data['message']);
+            }
           },
           error: function(response, statusText)
           {
             //console.log(JSON.parse(response.responseText));
-            console.log(response);
+            console.log('error', response);
           }
         });
       };

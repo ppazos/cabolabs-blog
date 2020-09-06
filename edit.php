@@ -12,8 +12,7 @@
 
     <title>CaboLabs Blog - Edit article</title>
     <!-- Bootstrap -->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link href="<?=$_base_dir;?>/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -85,9 +84,19 @@
             <input type="text" name="tags" id="tags" value="<?=tags_array_to_csv_string($post['tags'])?>" class="form-control" />
           </div>
           <div class="form-group">
-            <label>Lang</label><br/>
-            <label>EN <input type="radio" name="lang" value="en" class="form-control" <?=($post['lang']=='en')?'checked="checked"':''?> /></label>
-            <label>ES <input type="radio" name="lang" value="es" class="form-control" <?=($post['lang']=='es')?'checked="checked"':''?> /></label>
+            <label>Language</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" name="lang" type="radio" id="lang_en" value="en" <?=($post['lang']=='en')?'checked="checked"':''?>>
+            <label class="form-check-label" for="lang_en">
+              EN
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" name="lang" type="radio" id="lang_es" value="es" <?=($post['lang']=='es')?'checked="checked"':''?>>
+            <label class="form-check-label" for="lang_es">
+              ES
+            </label>
           </div>
           <button type="submit" class="btn btn-primary">Update</button>
         </form>
@@ -98,8 +107,7 @@
 
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-    <script src="<?=$_base_dir;?>/vendor/popper/popper.min.js"></script>
-    <script src="<?=$_base_dir;?>/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=$_base_dir;?>/js/bootstrap.bundle.min.js"></script>
     <script src="<?=$_base_dir;?>/js/clean-blog.min.js"></script>
     <script src="<?=$_base_dir;?>/vendor/tinymce/tinymce.min.js"></script>
 
@@ -138,6 +146,8 @@
         });
       });
 
+      // FIXME: validate like create
+
       $("#create_form").submit(function(e) {
 
         var url = this.action;
@@ -158,6 +168,10 @@
             if (data['status'] == 'ok')
             {
               window.location.href = data['redirect'];
+            }
+            else
+            {
+              alert(data['message']);
             }
           },
           error: function(response, statusText)

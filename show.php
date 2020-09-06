@@ -28,8 +28,7 @@
     <meta property="og:image:alt" content="CaboLabs Health Informatics, Standards and Interoperability" />
 
     <!-- Bootstrap -->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link href="<?=$_base_dir;?>/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -77,15 +76,15 @@
 
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('<?=$_base_dir;?>/img/home-bg.jpg')">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="page-heading">
-              <h1><?=$post['title']?></h1>
-              <!--<h2 class="subheading"><?=$post['summary']?></h2>-->
-              <span class="meta">Posted by <a href="#"><?=$post['author']?></a> on <?=$date?></span>
-            </div>
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            <h1><?=$post['title']?></h1>
+            <!--<h2 class="subheading"><?=$post['summary']?></h2>-->
+            <span class="meta">Posted by <a href="#"><?=$post['author']?></a> on <?=$date?></span>
           </div>
         </div>
+      </div>
     </header>
 
     <!-- Post Content -->
@@ -149,9 +148,7 @@
     <!-- Bootstrap core JavaScript -->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-
-    <script src="<?=$_base_dir;?>/vendor/popper/popper.min.js"></script>
-    <script src="<?=$_base_dir;?>/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=$_base_dir;?>/js/bootstrap.bundle.min.js"></script>
     <script src="<?=$_base_dir;?>/js/clean-blog.min.js"></script>
   </body>
 </html>
